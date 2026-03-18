@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="emmetthoolahan.dicetospeech">
+    package="com.emmetthoolahan.dicetospeech">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".F1App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -14,16 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!--
-            IMPORTANT: Replace with your real AdMob App ID from https://admob.google.com
-            Current value is Google's official TEST App ID — safe for development only.
-        -->
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713" />
-
         <activity
-            android:name="com.emmetthoolahan.dicetospeech.MainActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,21 +21,10 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="com.emmetthoolahan.dicetospeech.TeamSelectActivity"
-            android:exported="false" />
-
-        <activity
-            android:name="com.emmetthoolahan.dicetospeech.GameActivity"
-            android:exported="false" />
-
-        <activity
-            android:name="com.emmetthoolahan.dicetospeech.ResultActivity"
-            android:exported="false" />
-
-        <activity
-            android:name="com.emmetthoolahan.dicetospeech.PrivacyPolicyActivity"
-            android:exported="false" />
+        <activity android:name=".TeamSelectActivity"    android:exported="false" />
+        <activity android:name=".GameActivity"          android:exported="false" />
+        <activity android:name=".ResultActivity"        android:exported="false" />
+        <activity android:name=".PrivacyPolicyActivity" android:exported="false" />
 
     </application>
 
