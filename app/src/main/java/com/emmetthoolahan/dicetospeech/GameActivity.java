@@ -11,9 +11,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-
 import java.util.Locale;
 
 public class GameActivity extends AppCompatActivity {
@@ -22,23 +19,20 @@ public class GameActivity extends AppCompatActivity {
     private static final int TOTAL_LAPS_PREMIUM = 10;
     private static final int NEXT_LAP_DELAY_MS  = 3500;
 
-    // Event background colours (dark variants so white text is readable)
     private static final int COLOR_EVENT_DEFAULT      = 0xFF252525;
-    private static final int COLOR_EVENT_SAFETY_CAR   = 0xFF4D3B00; // amber
-    private static final int COLOR_EVENT_RAIN         = 0xFF003366; // blue
-    private static final int COLOR_EVENT_DRS          = 0xFF003B00; // green
-    private static final int COLOR_EVENT_TIRE_WARNING = 0xFF4D2200; // orange
-    private static final int COLOR_EVENT_ENGINE       = 0xFF4D0000; // red
+    private static final int COLOR_EVENT_SAFETY_CAR   = 0xFF4D3B00;
+    private static final int COLOR_EVENT_RAIN         = 0xFF003366;
+    private static final int COLOR_EVENT_DRS          = 0xFF003B00;
+    private static final int COLOR_EVENT_TIRE_WARNING = 0xFF4D2200;
+    private static final int COLOR_EVENT_ENGINE       = 0xFF4D0000;
 
-    // Tire wear bar colours
-    private static final int COLOR_TIRE_GOOD     = 0xFF4CAF50; // green
-    private static final int COLOR_TIRE_WORN     = 0xFFFF9800; // orange
-    private static final int COLOR_TIRE_CRITICAL = 0xFFF44336; // red
+    private static final int COLOR_TIRE_GOOD     = 0xFF4CAF50;
+    private static final int COLOR_TIRE_WORN     = 0xFFFF9800;
+    private static final int COLOR_TIRE_CRITICAL = 0xFFF44336;
 
     private RaceEngine raceEngine;
     private TextToSpeech tts;
     private BillingManager billingManager;
-    private AdView bannerAdView;
 
     private TextView tvLap, tvPosition, tvTeamName, tvTire, tvTirePct, tvEvent, tvLastResult;
     private ProgressBar pbTireWear;
@@ -46,8 +40,6 @@ public class GameActivity extends AppCompatActivity {
 
     private RaceEngine.Decision[] currentDecisions;
     private int previousPosition = -1;
-
-    // Stored so we can cancel it in onDestroy if the activity is killed mid-delay
     private Runnable nextLapRunnable;
 
     @Override
@@ -56,17 +48,12 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
         billingManager = new BillingManager(this, new BillingManager.PurchaseListener() {
-            @Override
-            public void onAdsRemoved() {
-                runOnUiThread(() -> bannerAdView.setVisibility(View.GONE));
-            }
             @Override public void onPremiumTeamsUnlocked() {}
             @Override public void onSeasonPassUnlocked() {}
         });
 
         int teamIndex = getIntent().getIntExtra(TeamSelectActivity.EXTRA_TEAM_INDEX, 0);
         Team[] teams = TeamData.getAllTeams();
-        // Clamp index defensively
         teamIndex = Math.max(0, Math.min(teamIndex, teams.length - 1));
         Team selectedTeam = teams[teamIndex];
 
@@ -84,13 +71,6 @@ public class GameActivity extends AppCompatActivity {
         btnDecision1 = findViewById(R.id.btn_decision_1);
         btnDecision2 = findViewById(R.id.btn_decision_2);
         btnDecision3 = findViewById(R.id.btn_decision_3);
-        bannerAdView = findViewById(R.id.adView);
-
-        if (!billingManager.isAdsRemoved()) {
-            bannerAdView.loadAd(new AdRequest.Builder().build());
-        } else {
-            bannerAdView.setVisibility(View.GONE);
-        }
 
         tvTeamName.setText("Team: " + selectedTeam.name);
         tvTeamName.setTextColor(selectedTeam.color);
@@ -131,18 +111,18 @@ public class GameActivity extends AppCompatActivity {
         int pos = raceEngine.position;
         if (previousPosition < 0) {
             tvPosition.setText("P" + pos);
-            tvPosition.setTextColor(0xFFFFD700); // gold
+            tvPosition.setTextColor(0xFFFFD700);
         } else {
-            int delta = previousPosition - pos; // positive = gained positions
+            int delta = previousPosition - pos;
             if (delta > 0) {
                 tvPosition.setText("P" + pos + " +" + delta + " \u2191");
-                tvPosition.setTextColor(0xFF4CAF50); // green
+                tvPosition.setTextColor(0xFF4CAF50);
             } else if (delta < 0) {
                 tvPosition.setText("P" + pos + " " + delta + " \u2193");
-                tvPosition.setTextColor(0xFFF44336); // red
+                tvPosition.setTextColor(0xFFF44336);
             } else {
                 tvPosition.setText("P" + pos);
-                tvPosition.setTextColor(0xFFFFD700); // gold
+                tvPosition.setTextColor(0xFFFFD700);
             }
         }
         previousPosition = pos;
@@ -184,8 +164,8 @@ public class GameActivity extends AppCompatActivity {
                 RaceEngine.Decision.PIT_HARD,
                 RaceEngine.Decision.STAY_NORMAL
             };
-            btnDecision1.setText(raining ? "PIT — WET TIRES" : "PIT — MEDIUM TIRES");
-            btnDecision2.setText("PIT — HARD TIRES (lasts longer)");
+            btnDecision1.setText(raining ? "PIT \u2014 WET TIRES" : "PIT \u2014 MEDIUM TIRES");
+            btnDecision2.setText("PIT \u2014 HARD TIRES (lasts longer)");
             btnDecision3.setText("STAY OUT (risky)");
 
         } else if (event == RaceEngine.Event.DRS_ZONE || event == RaceEngine.Event.ENGINE_ISSUE) {
@@ -194,9 +174,9 @@ public class GameActivity extends AppCompatActivity {
                 RaceEngine.Decision.STAY_SAVE,
                 RaceEngine.Decision.PIT_MEDIUM
             };
-            btnDecision1.setText("PUSH ENGINE — ATTACK");
-            btnDecision2.setText("SAVE ENGINE — PROTECT POSITION");
-            btnDecision3.setText("PIT — MEDIUM TIRES");
+            btnDecision1.setText("PUSH ENGINE \u2014 ATTACK");
+            btnDecision2.setText("SAVE ENGINE \u2014 PROTECT POSITION");
+            btnDecision3.setText("PIT \u2014 MEDIUM TIRES");
 
         } else {
             currentDecisions = new RaceEngine.Decision[]{
@@ -204,12 +184,11 @@ public class GameActivity extends AppCompatActivity {
                 RaceEngine.Decision.STAY_NORMAL,
                 RaceEngine.Decision.PIT_MEDIUM
             };
-            btnDecision1.setText("ATTACK — PUSH FOR POSITIONS");
-            btnDecision2.setText("MANAGE — CONSERVE TIRES");
-            btnDecision3.setText("PIT — MEDIUM TIRES");
+            btnDecision1.setText("ATTACK \u2014 PUSH FOR POSITIONS");
+            btnDecision2.setText("MANAGE \u2014 CONSERVE TIRES");
+            btnDecision3.setText("PIT \u2014 MEDIUM TIRES");
         }
 
-        int[] indices = {0, 1, 2};
         Button[] buttons = {btnDecision1, btnDecision2, btnDecision3};
         for (int i = 0; i < buttons.length; i++) {
             final int idx = i;
@@ -250,13 +229,11 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        // Cancel any pending lap transition to prevent callback firing on a destroyed activity
         if (nextLapRunnable != null) {
             tvLap.removeCallbacks(nextLapRunnable);
             nextLapRunnable = null;
         }
         if (tts != null) { tts.stop(); tts.shutdown(); }
-        if (bannerAdView != null) bannerAdView.destroy();
         billingManager.destroy();
         super.onDestroy();
     }

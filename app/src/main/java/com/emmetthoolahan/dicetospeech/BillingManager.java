@@ -21,12 +21,10 @@ import java.util.List;
 
 public class BillingManager implements PurchasesUpdatedListener {
 
-    public static final String PRODUCT_REMOVE_ADS    = "remove_ads";
     public static final String PRODUCT_PREMIUM_TEAMS = "premium_teams_pack";
     public static final String PRODUCT_SEASON_PASS   = "season_pass";
 
-    private static final String PREF_NAME         = "f1_purchases";
-    private static final String KEY_ADS_REMOVED   = "ads_removed";
+    private static final String PREF_NAME         = "rsm_purchases";
     private static final String KEY_PREMIUM_TEAMS = "premium_teams";
     private static final String KEY_SEASON_PASS   = "season_pass_owned";
 
@@ -35,7 +33,6 @@ public class BillingManager implements PurchasesUpdatedListener {
     private final PurchaseListener listener;
 
     public interface PurchaseListener {
-        void onAdsRemoved();
         void onPremiumTeamsUnlocked();
         void onSeasonPassUnlocked();
     }
@@ -43,7 +40,6 @@ public class BillingManager implements PurchasesUpdatedListener {
     public BillingManager(Context context, PurchaseListener listener) {
         this.prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         this.listener = listener;
-        // Use application context to avoid activity leaks in the billing client
         this.billingClient = BillingClient.newBuilder(context.getApplicationContext())
                 .setListener(this)
                 .enablePendingPurchases()
@@ -60,7 +56,6 @@ public class BillingManager implements PurchasesUpdatedListener {
         });
     }
 
-    public boolean isAdsRemoved()           { return prefs.getBoolean(KEY_ADS_REMOVED,   false); }
     public boolean isPremiumTeamsUnlocked() { return prefs.getBoolean(KEY_PREMIUM_TEAMS, false); }
     public boolean isSeasonPassOwned()      { return prefs.getBoolean(KEY_SEASON_PASS,    false); }
 
@@ -114,13 +109,8 @@ public class BillingManager implements PurchasesUpdatedListener {
                     .setPurchaseToken(purchase.getPurchaseToken()).build();
             billingClient.acknowledgePurchase(ack, r -> {});
         }
-        // Batch all pref writes into a single apply() call
         SharedPreferences.Editor ed = prefs.edit();
         List<String> products = purchase.getProducts();
-        if (products.contains(PRODUCT_REMOVE_ADS)) {
-            ed.putBoolean(KEY_ADS_REMOVED, true);
-            if (listener != null) listener.onAdsRemoved();
-        }
         if (products.contains(PRODUCT_PREMIUM_TEAMS)) {
             ed.putBoolean(KEY_PREMIUM_TEAMS, true);
             if (listener != null) listener.onPremiumTeamsUnlocked();
