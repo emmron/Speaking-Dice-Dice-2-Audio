@@ -8,3 +8,8 @@
 /build
 /captures
 .externalNativeBuild
+
+# Keystore — NEVER commit these
+keystore.properties
+*.jks
+*.keystore

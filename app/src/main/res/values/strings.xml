@@ -1,3 +1,38 @@
 <resources>
-    <string name="app_name">DiceToSpeech</string>
+    <string name="app_name">Race Strategy Manager</string>
+    <string name="subtitle">Pit Stop. Overtake. Win.</string>
+    <string name="btn_play">RACE NOW</string>
+    <string name="btn_championship">CHAMPIONSHIP STANDINGS</string>
+    <string name="btn_remove_ads">REMOVE ADS</string>
+    <string name="btn_privacy_policy">Privacy Policy</string>
+
+    <string name="privacy_policy_title">Privacy Policy</string>
+    <string name="privacy_policy_text">
+Race Strategy Manager — Privacy Policy\n
+Last updated: March 2026\n\n
+
+1. Information We Collect\n
+Race Strategy Manager does not collect, store, or share any personally identifiable information.\n\n
+
+The app uses the following third-party services that may collect data:\n\n
+
+• Google AdMob — displays advertisements. AdMob may collect your device\'s advertising ID to serve relevant ads. See Google\'s Privacy Policy at https://policies.google.com/privacy\n\n
+
+• Google Play Billing — processes in-app purchases (Remove Ads, Premium Teams, Season Pass). Purchase records are handled entirely by Google Play. See Google\'s Privacy Policy at https://policies.google.com/privacy\n\n
+
+2. Data Storage\n
+Game progress (championship points, race count) and purchase status (ads removed, unlocked teams) are stored locally on your device only using Android SharedPreferences. This data is never transmitted off your device.\n\n
+
+3. Children\'s Privacy\n
+This app does not knowingly collect data from children under 13. The app contains advertising and in-app purchases and is intended for general audiences.\n\n
+
+4. Advertising\n
+This app uses Google AdMob to display banner and interstitial advertisements. You can remove all ads via the in-app purchase. For information on opting out of personalised ads, visit https://support.google.com/ads/answer/2662922\n\n
+
+5. Changes to This Policy\n
+We may update this Privacy Policy from time to time. Any changes will be reflected with an updated date above.\n\n
+
+6. Contact\n
+If you have any questions about this Privacy Policy, please contact the developer through the Google Play Store listing.
+    </string>
 </resources>

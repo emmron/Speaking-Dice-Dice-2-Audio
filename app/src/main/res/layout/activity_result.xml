@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/f1_black">
+
+    <TextView
+        android:id="@+id/tv_result_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RACE RESULT"
+        android:textColor="@color/f1_red"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:layout_marginTop="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Podium medal for P1/P2/P3 (hidden for other positions and DNF) -->
+    <TextView
+        android:id="@+id/tv_medal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="48sp"
+        android:layout_marginTop="12dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_result_title" />
+
+    <!-- Large finish position -->
+    <TextView
+        android:id="@+id/tv_finish_position"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/f1_gold"
+        android:textSize="72sp"
+        android:textStyle="bold"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_medal" />
+
+    <TextView
+        android:id="@+id/tv_points_earned"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/f1_white"
+        android:textSize="20sp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_finish_position" />
+
+    <TextView
+        android:id="@+id/tv_total_points"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/f1_white"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_points_earned" />
+
+    <TextView
+        android:id="@+id/tv_championship_pos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/f1_gold"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_total_points" />
+
+    <Button
+        android:id="@+id/btn_next_race"
+        android:layout_width="200dp"
+        android:layout_height="56dp"
+        android:text="NEXT RACE"
+        android:textColor="@color/f1_white"
+        android:backgroundTint="@color/f1_red"
+        android:textSize="16sp"
+        android:layout_marginTop="40dp"
+        android:onClick="onNextRaceClicked"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_championship_pos" />
+
+    <Button
+        android:id="@+id/btn_main_menu"
+        android:layout_width="200dp"
+        android:layout_height="56dp"
+        android:text="MAIN MENU"
+        android:textColor="@color/f1_white"
+        android:backgroundTint="@color/f1_dark_grey"
+        android:textSize="16sp"
+        android:layout_marginTop="12dp"
+        android:onClick="onMainMenuClicked"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_next_race" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
