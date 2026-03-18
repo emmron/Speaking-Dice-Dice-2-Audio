@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!--
+        4x4 checkered flag pattern in the safe zone (18..90 on each axis)
+        Each square = 18x18. White squares = checkerboard white cells.
+        Transparent squares show the red background beneath.
+    -->
+
+    <!-- Row 0 (y=18): white at col0, col2 -->
+    <path android:fillColor="#FFFFFF" android:pathData="M18,18 h18 v18 h-18 Z"/>
+    <path android:fillColor="#FFFFFF" android:pathData="M54,18 h18 v18 h-18 Z"/>
+
+    <!-- Row 1 (y=36): white at col1, col3 -->
+    <path android:fillColor="#FFFFFF" android:pathData="M36,36 h18 v18 h-18 Z"/>
+    <path android:fillColor="#FFFFFF" android:pathData="M72,36 h18 v18 h-18 Z"/>
+
+    <!-- Row 2 (y=54): white at col0, col2 -->
+    <path android:fillColor="#FFFFFF" android:pathData="M18,54 h18 v18 h-18 Z"/>
+    <path android:fillColor="#FFFFFF" android:pathData="M54,54 h18 v18 h-18 Z"/>
+
+    <!-- Row 3 (y=72): white at col1, col3 -->
+    <path android:fillColor="#FFFFFF" android:pathData="M36,72 h18 v18 h-18 Z"/>
+    <path android:fillColor="#FFFFFF" android:pathData="M72,72 h18 v18 h-18 Z"/>
+
+</vector>

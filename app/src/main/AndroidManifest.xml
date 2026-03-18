@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="emmetthoolahan.dicetospeech">
+    package="com.emmetthoolahan.dicetospeech">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name="com.emmetthoolahan.dicetospeech.MainActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,21 +21,10 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="com.emmetthoolahan.dicetospeech.TeamSelectActivity"
-            android:exported="false" />
-
-        <activity
-            android:name="com.emmetthoolahan.dicetospeech.GameActivity"
-            android:exported="false" />
-
-        <activity
-            android:name="com.emmetthoolahan.dicetospeech.ResultActivity"
-            android:exported="false" />
-
-        <activity
-            android:name="com.emmetthoolahan.dicetospeech.PrivacyPolicyActivity"
-            android:exported="false" />
+        <activity android:name=".TeamSelectActivity"    android:exported="false" />
+        <activity android:name=".GameActivity"          android:exported="false" />
+        <activity android:name=".ResultActivity"        android:exported="false" />
+        <activity android:name=".PrivacyPolicyActivity" android:exported="false" />
 
     </application>
 

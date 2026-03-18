@@ -23,13 +23,12 @@ public class TeamSelectActivity extends AppCompatActivity {
         setContentView(R.layout.activity_team_select);
 
         billingManager = new BillingManager(this, new BillingManager.PurchaseListener() {
-            @Override public void onAdsRemoved() {}
             @Override
             public void onPremiumTeamsUnlocked() {
                 runOnUiThread(() -> {
                     Toast.makeText(TeamSelectActivity.this,
                             "Premium teams unlocked!", Toast.LENGTH_LONG).show();
-                    buildTeamList(); // refresh to show unlocked teams
+                    buildTeamList();
                 });
             }
             @Override public void onSeasonPassUnlocked() {}
@@ -57,7 +56,7 @@ public class TeamSelectActivity extends AppCompatActivity {
 
             String label = (locked ? "\uD83D\uDD12 " : "") + team.name
                     + " (" + team.country + ")"
-                    + (locked ? "  — Unlock Premium Pack" : "  ★ " + team.carRating + "/10");
+                    + (locked ? "  \u2014 Unlock Premium Pack" : "  \u2605 " + team.carRating + "/10");
             btn.setText(label);
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
