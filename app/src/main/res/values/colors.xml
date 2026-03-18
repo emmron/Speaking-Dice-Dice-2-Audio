@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <!-- AppTheme primary colors -->
+    <color name="colorPrimary">#E10600</color>
+    <color name="colorPrimaryDark">#A00000</color>
+    <color name="colorAccent">#FFD700</color>
+
+    <!-- F1 game palette -->
+    <color name="f1_black">#1A1A1A</color>
+    <color name="f1_red">#E10600</color>
+    <color name="f1_white">#FFFFFF</color>
+    <color name="f1_gold">#FFD700</color>
+    <color name="f1_dark_grey">#3A3A3A</color>
 </resources>

@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">DiceToSpeech</string>
+    <string name="app_name">F1 Strategy Manager</string>
+    <string name="subtitle">Race. Strategize. Win.</string>
+    <string name="btn_play">RACE NOW</string>
+    <string name="btn_championship">CHAMPIONSHIP STANDINGS</string>
+    <string name="btn_remove_ads">REMOVE ADS</string>
 </resources>
