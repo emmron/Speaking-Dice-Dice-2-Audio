@@ -9,8 +9,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.ads.MobileAds;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,8 +22,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        MobileAds.initialize(this, status -> {});
 
         btnRemoveAds = findViewById(R.id.btn_remove_ads);
 

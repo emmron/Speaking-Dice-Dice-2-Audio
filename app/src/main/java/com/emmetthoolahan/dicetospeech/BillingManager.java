@@ -11,7 +11,6 @@ import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.BillingResult;
-import com.android.billingclient.api.ProductDetails;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.QueryProductDetailsParams;
@@ -26,10 +25,10 @@ public class BillingManager implements PurchasesUpdatedListener {
     public static final String PRODUCT_PREMIUM_TEAMS = "premium_teams_pack";
     public static final String PRODUCT_SEASON_PASS   = "season_pass";
 
-    private static final String PREF_NAME          = "f1_purchases";
-    private static final String KEY_ADS_REMOVED    = "ads_removed";
-    private static final String KEY_PREMIUM_TEAMS  = "premium_teams";
-    private static final String KEY_SEASON_PASS    = "season_pass_owned";
+    private static final String PREF_NAME         = "f1_purchases";
+    private static final String KEY_ADS_REMOVED   = "ads_removed";
+    private static final String KEY_PREMIUM_TEAMS = "premium_teams";
+    private static final String KEY_SEASON_PASS   = "season_pass_owned";
 
     private final BillingClient billingClient;
     private final SharedPreferences prefs;
@@ -44,7 +43,8 @@ public class BillingManager implements PurchasesUpdatedListener {
     public BillingManager(Context context, PurchaseListener listener) {
         this.prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         this.listener = listener;
-        this.billingClient = BillingClient.newBuilder(context)
+        // Use application context to avoid activity leaks in the billing client
+        this.billingClient = BillingClient.newBuilder(context.getApplicationContext())
                 .setListener(this)
                 .enablePendingPurchases()
                 .build();
@@ -60,11 +60,10 @@ public class BillingManager implements PurchasesUpdatedListener {
         });
     }
 
-    public boolean isAdsRemoved()         { return prefs.getBoolean(KEY_ADS_REMOVED,   false); }
+    public boolean isAdsRemoved()           { return prefs.getBoolean(KEY_ADS_REMOVED,   false); }
     public boolean isPremiumTeamsUnlocked() { return prefs.getBoolean(KEY_PREMIUM_TEAMS, false); }
-    public boolean isSeasonPassOwned()    { return prefs.getBoolean(KEY_SEASON_PASS,    false); }
+    public boolean isSeasonPassOwned()      { return prefs.getBoolean(KEY_SEASON_PASS,    false); }
 
-    /** Launch a Google Play billing flow for the given product ID. */
     public void launchPurchase(Activity activity, String productId) {
         if (!billingClient.isReady()) return;
         QueryProductDetailsParams params = QueryProductDetailsParams.newBuilder()
@@ -115,20 +114,22 @@ public class BillingManager implements PurchasesUpdatedListener {
                     .setPurchaseToken(purchase.getPurchaseToken()).build();
             billingClient.acknowledgePurchase(ack, r -> {});
         }
+        // Batch all pref writes into a single apply() call
         SharedPreferences.Editor ed = prefs.edit();
         List<String> products = purchase.getProducts();
         if (products.contains(PRODUCT_REMOVE_ADS)) {
-            ed.putBoolean(KEY_ADS_REMOVED, true).apply();
+            ed.putBoolean(KEY_ADS_REMOVED, true);
             if (listener != null) listener.onAdsRemoved();
         }
         if (products.contains(PRODUCT_PREMIUM_TEAMS)) {
-            ed.putBoolean(KEY_PREMIUM_TEAMS, true).apply();
+            ed.putBoolean(KEY_PREMIUM_TEAMS, true);
             if (listener != null) listener.onPremiumTeamsUnlocked();
         }
         if (products.contains(PRODUCT_SEASON_PASS)) {
-            ed.putBoolean(KEY_SEASON_PASS, true).apply();
+            ed.putBoolean(KEY_SEASON_PASS, true);
             if (listener != null) listener.onSeasonPassUnlocked();
         }
+        ed.apply();
     }
 
     public void destroy() {

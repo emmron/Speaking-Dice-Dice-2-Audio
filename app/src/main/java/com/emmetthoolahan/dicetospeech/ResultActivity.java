@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 
@@ -25,24 +24,24 @@ public class ResultActivity extends AppCompatActivity {
     public static final String EXTRA_DNF       = "dnf";
     public static final String EXTRA_TEAM_NAME = "team_name";
 
-    // Replace with your real interstitial ad unit ID before publishing
+    // Replace with your real ad unit ID before publishing
     private static final String INTERSTITIAL_AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712";
 
     private InterstitialAd interstitialAd;
     private BillingManager billingManager;
     private TextToSpeech tts;
 
-    private boolean pendingNavToMenu  = false;
-    private boolean pendingNavToRace  = false;
+    // Single field replaces the two redundant boolean flags (pendingNavToMenu / pendingNavToRace)
+    private Class<?> pendingNavTarget = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
 
-        int    position    = getIntent().getIntExtra(EXTRA_POSITION, 20);
-        int    pts         = getIntent().getIntExtra(EXTRA_POINTS, 0);
-        boolean dnf        = getIntent().getBooleanExtra(EXTRA_DNF, false);
+        int     position = getIntent().getIntExtra(EXTRA_POSITION, 20);
+        int     pts      = getIntent().getIntExtra(EXTRA_POINTS, 0);
+        boolean dnf      = getIntent().getBooleanExtra(EXTRA_DNF, false);
 
         billingManager = new BillingManager(this, new BillingManager.PurchaseListener() {
             @Override public void onAdsRemoved() {}
@@ -53,6 +52,7 @@ public class ResultActivity extends AppCompatActivity {
         ChampionshipManager cm = new ChampionshipManager(this);
         cm.addRaceResult(pts);
 
+        TextView tvMedal      = findViewById(R.id.tv_medal);
         TextView tvFinishPos  = findViewById(R.id.tv_finish_position);
         TextView tvPoints     = findViewById(R.id.tv_points_earned);
         TextView tvTotal      = findViewById(R.id.tv_total_points);
@@ -60,15 +60,20 @@ public class ResultActivity extends AppCompatActivity {
 
         if (dnf) {
             tvFinishPos.setText("DNF");
-            tvFinishPos.setTextColor(0xFFFF3333);
+            tvFinishPos.setTextColor(0xFFF44336);
         } else {
             tvFinishPos.setText("P" + position);
+            // Show podium medal for top 3
+            String medal = podiumMedal(position);
+            if (!medal.isEmpty()) {
+                tvMedal.setText(medal);
+                tvMedal.setVisibility(View.VISIBLE);
+            }
         }
         tvPoints.setText("+" + pts + " Championship Points");
         tvTotal.setText("Season Total: " + cm.getPlayerPoints() + " pts");
         tvChampPos.setText("Championship Position: P" + cm.getPlayerChampionshipPosition());
 
-        // TTS announcement
         String announcement = dnf
                 ? "DNF. Tough race. Better luck next time!"
                 : "Finished P" + position + ". " + pts + " championship points earned!";
@@ -80,8 +85,16 @@ public class ResultActivity extends AppCompatActivity {
         });
 
         if (!billingManager.isAdsRemoved()) {
-            MobileAds.initialize(this, s -> {});
             loadInterstitial();
+        }
+    }
+
+    private String podiumMedal(int position) {
+        switch (position) {
+            case 1: return "\uD83E\uDD47"; // 🥇
+            case 2: return "\uD83E\uDD48"; // 🥈
+            case 3: return "\uD83E\uDD49"; // 🥉
+            default: return "";
         }
     }
 
@@ -94,8 +107,7 @@ public class ResultActivity extends AppCompatActivity {
                         interstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
                             @Override
                             public void onAdDismissedFullScreenContent() {
-                                if (pendingNavToMenu) goToMainMenu();
-                                else if (pendingNavToRace) goToTeamSelect();
+                                navigateTo(pendingNavTarget);
                             }
                         });
                     }
@@ -105,37 +117,38 @@ public class ResultActivity extends AppCompatActivity {
     }
 
     public void onNextRaceClicked(View view) {
-        if (interstitialAd != null) {
-            pendingNavToRace = true;
-            interstitialAd.show(this);
-        } else {
-            goToTeamSelect();
-        }
+        showAdThenNavigate(TeamSelectActivity.class);
     }
 
     public void onMainMenuClicked(View view) {
+        showAdThenNavigate(MainActivity.class);
+    }
+
+    private void showAdThenNavigate(Class<?> target) {
         if (interstitialAd != null) {
-            pendingNavToMenu = true;
+            pendingNavTarget = target;
             interstitialAd.show(this);
         } else {
-            goToMainMenu();
+            navigateTo(target);
         }
     }
 
-    private void goToMainMenu() {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    private void navigateTo(Class<?> target) {
+        if (target == null) return;
+        Intent intent = new Intent(this, target);
+        if (target == MainActivity.class) {
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        }
         startActivity(intent);
-        finish();
-    }
-
-    private void goToTeamSelect() {
-        startActivity(new Intent(this, TeamSelectActivity.class));
         finish();
     }
 
     @Override
     protected void onDestroy() {
+        if (interstitialAd != null) {
+            interstitialAd.setFullScreenContentCallback(null);
+            interstitialAd = null;
+        }
         if (tts != null) { tts.stop(); tts.shutdown(); }
         billingManager.destroy();
         super.onDestroy();

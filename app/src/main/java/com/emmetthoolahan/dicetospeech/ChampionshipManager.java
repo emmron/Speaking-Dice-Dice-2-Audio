@@ -3,6 +3,7 @@ package com.emmetthoolahan.dicetospeech;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,7 +67,7 @@ public class ChampionshipManager {
     }
 
     public Map<String, Integer> getAllPoints() {
-        return new HashMap<>(points);
+        return Collections.unmodifiableMap(points);
     }
 
     public int getPlayerChampionshipPosition() {
