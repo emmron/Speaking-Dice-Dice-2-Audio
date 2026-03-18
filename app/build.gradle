@@ -3,19 +3,40 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 33
     defaultConfig {
-        applicationId "emmetthoolahan.dicetospeech"
+        applicationId "com.emmron.racestrategy"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 3
-        versionName "3.0"
+        versionCode 1
+        versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs {
+        release {
+            // Create a keystore.properties file in the project root (see keystore.properties.template).
+            // Generate your keystore with:
+            //   keytool -genkey -v -keystore racestrategy.jks -alias racestrategy -keyalg RSA -keysize 2048 -validity 10000
+            def propsFile = rootProject.file('keystore.properties')
+            if (propsFile.exists()) {
+                def props = new Properties()
+                props.load(new FileInputStream(propsFile))
+                storeFile     file(props['storeFile'])
+                storePassword props['storePassword']
+                keyAlias      props['keyAlias']
+                keyPassword   props['keyPassword']
+            }
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled true
+            signingConfig    signingConfigs.release
+            minifyEnabled    true
+            shrinkResources  true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -27,10 +48,15 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
-    // Google AdMob - banner + interstitial ads
+    // Google AdMob — banner + interstitial ads
+    // TODO: Replace test IDs before publishing — see GameActivity.java and ResultActivity.java
     implementation 'com.google.android.gms:play-services-ads:22.6.0'
 
-    // Google Play Billing - for "Remove Ads" in-app purchase
+    // Google Play Billing — Remove Ads, Premium Teams, Season Pass IAP
+    // TODO: Create products in Play Console before publishing:
+    //   - remove_ads       (one-time, your price)
+    //   - premium_teams_pack (one-time, your price)
+    //   - season_pass      (one-time, your price)
     implementation 'com.android.billingclient:billing:6.1.0'
 
     testImplementation 'junit:junit:4.13.2'

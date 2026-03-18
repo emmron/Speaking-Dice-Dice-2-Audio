@@ -77,6 +77,10 @@ public class MainActivity extends AppCompatActivity {
         billingManager.launchPurchase(this, BillingManager.PRODUCT_REMOVE_ADS);
     }
 
+    public void onPrivacyPolicyClicked(View view) {
+        startActivity(new Intent(this, PrivacyPolicyActivity.class));
+    }
+
     @Override
     protected void onDestroy() {
         billingManager.destroy();

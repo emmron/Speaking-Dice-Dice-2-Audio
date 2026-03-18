@@ -43,6 +43,10 @@
             android:name="com.emmetthoolahan.dicetospeech.ResultActivity"
             android:exported="false" />
 
+        <activity
+            android:name="com.emmetthoolahan.dicetospeech.PrivacyPolicyActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

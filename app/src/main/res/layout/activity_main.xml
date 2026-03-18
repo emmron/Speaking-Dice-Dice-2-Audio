@@ -12,9 +12,9 @@
         android:layout_height="wrap_content"
         android:text="@string/app_name"
         android:textColor="@color/f1_red"
-        android:textSize="32sp"
+        android:textSize="28sp"
         android:textStyle="bold"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="56dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -40,7 +40,7 @@
         android:backgroundTint="@color/f1_red"
         android:textColor="@color/f1_white"
         android:onClick="onPlayClicked"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="56dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_subtitle" />
@@ -50,11 +50,11 @@
         android:layout_width="220dp"
         android:layout_height="54dp"
         android:text="@string/btn_championship"
-        android:textSize="14sp"
+        android:textSize="13sp"
         android:backgroundTint="@color/f1_dark_grey"
         android:textColor="@color/f1_white"
         android:onClick="onChampionshipClicked"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_play" />
@@ -68,16 +68,32 @@
         android:backgroundTint="@color/f1_gold"
         android:textColor="@color/f1_black"
         android:onClick="onRemoveAdsClicked"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_championship" />
+
+    <!-- Privacy Policy link — required by Google Play for apps with ads/IAP -->
+    <TextView
+        android:id="@+id/tv_privacy_policy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_privacy_policy"
+        android:textColor="#888888"
+        android:textSize="12sp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:onClick="onPrivacyPolicyClicked"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_version"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/tv_version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="v3.0"
+        android:text="v1.0"
         android:textColor="@color/f1_dark_grey"
         android:textSize="11sp"
         android:layout_marginBottom="16dp"

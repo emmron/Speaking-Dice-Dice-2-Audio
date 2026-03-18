@@ -9,16 +9,15 @@ import java.util.Map;
 
 public class ChampionshipManager {
 
-    private static final String PREF_NAME      = "f1_championship";
+    private static final String PREF_NAME      = "rsm_championship";
     private static final String KEY_RACE_COUNT = "race_count";
     private static final String KEY_POINTS_    = "pts_";
 
-    // AI competitors seeded with realistic starting points
+    // Fictional AI competitor names — no real driver names used
     private static final String[] AI_DRIVERS = {
-        "Verstappen", "Perez", "Hamilton", "Alonso", "Leclerc",
-        "Norris", "Sainz", "Russell", "Piastri", "Stroll"
+        "V. Hartmann", "S. Flores", "L. Sterling", "F. Casanova", "C. Laurent",
+        "L. Nash", "C. Moreno", "G. Werner", "O. Perrin", "A. Dubois"
     };
-    private static final int[] AI_BASE_POINTS = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
     private final SharedPreferences prefs;
     private int raceCount;
@@ -31,16 +30,14 @@ public class ChampionshipManager {
     }
 
     private void loadPoints() {
-        for (int i = 0; i < AI_DRIVERS.length; i++) {
-            points.put(AI_DRIVERS[i], prefs.getInt(KEY_POINTS_ + AI_DRIVERS[i], AI_BASE_POINTS[i]));
+        for (String driver : AI_DRIVERS) {
+            points.put(driver, prefs.getInt(KEY_POINTS_ + driver, 0));
         }
         points.put("YOU", prefs.getInt(KEY_POINTS_ + "YOU", 0));
     }
 
-    /** Call after each race to record results. */
     public void addRaceResult(int playerPoints) {
         points.put("YOU", getPlayerPoints() + playerPoints);
-        // Simulate AI earning points each race
         for (String driver : AI_DRIVERS) {
             int aiGain = (int) (Math.random() * 26); // 0–25 pts
             points.put(driver, points.getOrDefault(driver, 0) + aiGain);
